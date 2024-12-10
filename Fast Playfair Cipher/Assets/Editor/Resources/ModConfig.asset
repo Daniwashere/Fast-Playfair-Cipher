@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 615501dbe4f3fe94fbf4b564abb10237, type: 3}
+  m_Name: ModConfig
+  m_EditorClassIdentifier: 
+  id: FastPlayfairCipher
+  title: Fast Playfair Cipher
+  author: me
+  description: "\u201CWhen Fast Math and Playfair Cipher combine, no one\u2019s safe!\u201D
+    \u2013 W2S if he played KTaNE\n\nDecrypt a message through Playfair Cipher before
+    the time runs out.\n\nThe manual can be found in the manuals folder of the game
+    or at ktane.timwi.de.\n\r\nIf there are any bugs, please contact Dani was here#4317
+    on Discord."
+  version: 
+  outputFolder: build
+  previewImage: {fileID: 2800000, guid: a0bde99ff2cb8424390ee3f38a0c469d, type: 3}
