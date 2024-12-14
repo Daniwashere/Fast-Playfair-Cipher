@@ -247,7 +247,7 @@ public class FastPlayfairCipher : MonoBehaviour {
             Keyword += "R";
         if (PortPlatesCount > 1)
             Keyword += "S";
-        if ("ZABCDEFGHIJKLMNOPQRSTUVWXYZ".IndexOf(Bomb.GetSerialNumberLetters().Skip(1).First()) % 2 == 1)
+        if ("ZABCDEFGHIJKLMNOPQRSTUVWXY".IndexOf(Bomb.GetSerialNumberLetters().Skip(1).First()) % 2 == 1)
             Keyword += "T";
         if (DBatteries == 3)
             Keyword += "U";
@@ -255,7 +255,7 @@ public class FastPlayfairCipher : MonoBehaviour {
             Keyword += "V";
         if (RJPorts > 2)
             Keyword += "W";
-        if ("ZABCDEFGHIJKLMNOPQRSTUVWXYZ".IndexOf(Bomb.GetSerialNumberLetters().First()) % 2 == 0)
+        if ("ZABCDEFGHIJKLMNOPQRSTUVWXY".IndexOf(Bomb.GetSerialNumberLetters().First()) % 2 == 0)
             Keyword += "X";
         if (Batteries == 5)
             Keyword += "Y";
