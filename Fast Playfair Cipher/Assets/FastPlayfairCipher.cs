@@ -385,10 +385,10 @@ public class FastPlayfairCipher : MonoBehaviour {
 #pragma warning restore 414
    IEnumerator ProcessTwitchCommand(string command) 
    {
-        
         command = command.ToUpperInvariant().Trim();
         if (command.Equals("GO"))
         {
+            yield return "focus";
             GoButton.OnInteract();
             yield return null;
         }
@@ -401,6 +401,7 @@ public class FastPlayfairCipher : MonoBehaviour {
             }
             else
             {
+                yield return "focus";
                 for (int index = 0; index < Buttons.Length; index++)
                 {
                     if (command[0].ToString() == "ABCDEFGHIKLMNOPQRSTUVWXYZ"[index].ToString())
