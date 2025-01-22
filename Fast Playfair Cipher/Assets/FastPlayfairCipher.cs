@@ -383,46 +383,58 @@ public class FastPlayfairCipher : MonoBehaviour {
 #pragma warning disable 414
    private readonly string TwitchHelpMessage = @"Press the GO! button with !{0} go. Submit your answer with !{0} submit xx (Must be two letters).";
 #pragma warning restore 414
-   IEnumerator ProcessTwitchCommand(string command) 
+   private IEnumerator ProcessTwitchCommand(string command) 
    {
-        command = command.ToUpperInvariant().Trim();
-        if (command.Equals("GO"))
+        var m = Regex.Match(command, @"^\s*go\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+        if (m.Success)
         {
-            yield return "focus";
-            GoButton.OnInteract();
             yield return null;
+            GoButton.OnInteract();
+            yield break;
         }
-        else if (Regex.IsMatch(command, @"^SUBMIT [A-Z][A-Z]$"))
+        m = Regex.Match(command, @"^\s*submit\s+(?<letters>[A-Z]\s*[A-Z])\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+        if (!m.Success)
+            yield break;
+        var letters = m.Groups["letters"].Value.ToUpperInvariant().Where(i => "ABCDEFGHIJKLMNOPQRSTUVWXYZ".Contains(i)).Join("");
+        if (letters.Contains('J'))
         {
-            command = command.Substring(7).Trim();
-            if (command[0].ToString() == "J" || command[1].ToString() == "J")
-            {
-                yield return "sendtochaterror J and I are interchangeable!";
-            }
-            else
-            {
-                yield return "focus";
-                for (int index = 0; index < Buttons.Length; index++)
-                {
-                    if (command[0].ToString() == "ABCDEFGHIKLMNOPQRSTUVWXYZ"[index].ToString())
-                    {
-                        Buttons[index].OnInteract();
-                        break;
-                    }
-                }
-                for (int index = 0; index < Buttons.Length; index++)
-                {
-                    if (command[1].ToString() == "ABCDEFGHIKLMNOPQRSTUVWXYZ"[index].ToString())
-                    {
-                        Buttons[index].OnInteract();
-                        break;
-                    }
-                }
-                SubmitButton.OnInteract();
-                yield return null;
-            }
+            yield return "sendtochaterror Detected J in command. J and I are interchangable! Command ignored.";
+            yield break;
         }
-        else
-            yield return "sendtochaterror I don't understand!";
+        yield return null;
+        var ixA = "ABCDEFGHIKLMNOPQRSTUVWXYZ".IndexOf(letters[0]);
+        var ixB = "ABCDEFGHIKLMNOPQRSTUVWXYZ".IndexOf(letters[1]);
+        Buttons[ixA].OnInteract();
+        yield return new WaitForSeconds(0.1f);
+        Buttons[ixB].OnInteract();
+        yield return new WaitForSeconds(0.1f);
+        SubmitButton.OnInteract();
    }
+
+    private IEnumerator TwitchHandleForcedSolve()
+    {
+        if (!PressedGo)
+        {
+            GoButton.OnInteract();
+            yield return new WaitForSeconds(0.1f);
+        }
+        while (!ModuleSolved)
+        {
+            if (!answer.StartsWith(input))
+            {
+                input = "";
+                CharactersEntered = 0;
+                Debug.LogFormat("<Fast Playfair Cipher #{0}> Autosolver detected an incorrect input already entered, and is now resetting it.", ModuleId);
+            }
+            for (int i = input.Length; i < 2; i++)
+            {
+                int ix = "ABCDEFGHIKLMNOPQRSTUVWXYZ".IndexOf(answer[i]);
+                Buttons[ix].OnInteract();
+                yield return new WaitForSeconds(0.1f);
+            }
+            SubmitButton.OnInteract();
+            if (!ModuleSolved)
+                yield return new WaitForSeconds(0.1f);
+        }
+    }
 }
